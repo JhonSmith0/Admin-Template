@@ -17,7 +17,7 @@ export default function Layout(props: propsInt) {
       <MenuLateral />
       <div className="flex flex-col w-full p-7 bg-gray-300 dark:bg-gray-900 ">
         <Cabecalho titulo={props.titulo} subTitulo={props.subTitulo} />
-        <Conteudo children={props.children} />
+        <Conteudo>{props.children}</Conteudo>
       </div>
     </div>
   );
