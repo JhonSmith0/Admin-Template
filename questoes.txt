@@ -1,0 +1,8 @@
+- Como funciona h-numero no tailwind?
+
+- Como criar um context?
+- O que o provider faz ?
+- Como acessar os dados de um context ? (hooks && consumer)
+
+- Porque usar Link ao inves de a? o a da um refresh na pagina toda mesmo que o path seja o mesmo
+o link nao
