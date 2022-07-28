@@ -3,10 +3,12 @@ import MenuItem from "./MenuItem";
 import Logo from "./Logo";
 
 import { adjustments, bell, homeIcon, exit } from "../icons/index";
+import useAuthContext from "../data/hooks/useAuth";
 
 interface propsInt {}
 
 export default function MenuLateral() {
+  const { logout } = useAuthContext();
   return (
     <aside
       className="flex flex-col
@@ -29,7 +31,7 @@ export default function MenuLateral() {
         <MenuItem
           icon={exit}
           texto="Sair"
-          onClick={(e) => console.log("teste")}
+          onClick={logout}
           className="
           text-red-600
           dark:hover:bg-red-400
