@@ -1,18 +1,18 @@
 // import styles from "../styles/*.module.css";
 
 import { Component, useEffect, useState } from "react";
-import Head from "../../../node_modules/next/head";
-import Image from "../../../node_modules/next/image";
-import Router from "../../../node_modules/next/router";
-import Script from "../../../node_modules/next/script";
-import loading from "../../../public/images/loading-load.gif";
-import useAuthContext from "../data/hooks/useAuth";
+import Head from "../../node_modules/next/head";
+import Image from "../../node_modules/next/image";
+import Router from "../../node_modules/next/router";
+import Script from "../../node_modules/next/script";
+import loading from "../../public/images/loading-load.gif";
+import useAuthContext from "../components/data/hooks/useAuth";
 
 interface propsInt {
   children?: any;
 }
 
-export default function ForcarAutenticacao(props: propsInt) {
+export default function forcarAutenticacao(jsx: any) {
   const { usuario, carregando } = useAuthContext();
 
   function renderizarConteudo() {
@@ -28,7 +28,7 @@ export default function ForcarAutenticacao(props: propsInt) {
             }}
           ></Script>
         </Head>
-        {props.children}
+        {jsx}
       </>
     );
   }

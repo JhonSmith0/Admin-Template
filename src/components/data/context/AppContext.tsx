@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 type Tema = "dark" | "";
 interface AppContextProps {
@@ -16,10 +16,17 @@ const AppContext = createContext<AppContextProps>({
 
 export function AppProvider(props: any) {
   // Quando o setTema ser usado o provider e os dados vao ser atualizados
-  const [tema, setTema] = useState<Tema>("dark");
+  const [tema, setTema] = useState<Tema>("");
+
+  useEffect(() => {
+    const salvo = window.localStorage.getItem("tema") ?? "";
+    setTema(salvo);
+  }, []);
 
   function alternarTema() {
-    setTema(!tema ? "dark" : "");
+    const novo = !tema ? "dark" : "";
+    window.localStorage.setItem("tema", novo);
+    setTema(novo);
   }
 
   // Todos os filhos do Provider vao ter acesso ao value atraves do consumer

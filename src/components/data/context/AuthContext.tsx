@@ -9,6 +9,8 @@ import Usuario from "../../../model/Usuario";
 interface AuthContextProps {
   usuario?: Usuario;
   loginGoogle?: () => Promise<void>;
+  login?: (email: string, senha: string) => Promise<void>;
+  cadastrar?: (email: string, senha: string) => Promise<void>;
   logout?: () => Promise<void>;
   carregando?: boolean;
 }
@@ -45,23 +47,49 @@ export function AuthProvider(props: any) {
   const [usuario, setUsuario] = useState<Usuario>(null);
 
   useEffect(() => {
-    if (Cookies.get("admin-template-coder-auth")) {
+    if (Cookies.get("admin-template-coder-auth") && !usuario) {
       const cancelar = firebase.auth().onIdTokenChanged(configurarSessao);
       return () => cancelar();
     }
-  }, []);
+  }, [usuario]);
 
   async function configurarSessao(usuarioFireBase: any) {
     if (usuarioFireBase?.email) {
       setUsuario(await usuarioNormalizado(usuarioFireBase));
       gerenciarCookie(true);
-      setCarregando(false);
-      return usuarioFireBase.email;
     } else {
       setUsuario(null);
       gerenciarCookie(false);
+    }
+    setCarregando(false);
+  }
+
+  async function login(email: string, senha: string) {
+    try {
+      setCarregando(true);
+      const resp = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, senha);
+
+      await configurarSessao(resp.user);
+      Router.push("/");
+    } catch (e) {
+      console.log(e);
+    } finally {
       setCarregando(false);
-      return false;
+    }
+  }
+  async function cadastrar(email: string, senha: string) {
+    try {
+      setCarregando(true);
+      const resp = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, senha);
+
+      await configurarSessao(resp.user);
+      Router.push("/");
+    } finally {
+      setCarregando(false);
     }
   }
 
@@ -72,7 +100,7 @@ export function AuthProvider(props: any) {
         .auth()
         .signInWithPopup(new firebase.auth.GoogleAuthProvider());
 
-      await configurarSessao(resp);
+      await configurarSessao(resp.user);
       Router.push("/");
     } finally {
       setCarregando(false);
@@ -84,8 +112,10 @@ export function AuthProvider(props: any) {
       setCarregando(true);
       await firebase.auth().signOut();
       await configurarSessao(false);
+    } catch (e) {
     } finally {
       setCarregando(false);
+      Router.push("/autenticacao");
     }
   }
 
@@ -94,6 +124,8 @@ export function AuthProvider(props: any) {
       value={{
         usuario,
         loginGoogle,
+        login,
+        cadastrar,
         logout,
         carregando,
       }}

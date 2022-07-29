@@ -1,6 +1,8 @@
 //import styles from "../styles/*.module.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Image from "../../node_modules/next/image";
+import Router from "../../node_modules/next/router";
 import AuthInput from "../components/auth/AuthInput";
 import useAuthContext from "../components/data/hooks/useAuth";
 import { warning } from "../components/icons/index";
@@ -13,11 +15,18 @@ export default function Autenticacao(props: propsInt) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  const { usuario, loginGoogle } = useAuthContext();
+  const { usuario, loginGoogle, login, cadastrar } = useAuthContext();
+  useEffect(() => {
+    if (usuario) Router.push("/");
+  }, [usuario]);
 
-  function submeter() {
-    if (modo === "login") console.log("login");
-    if (modo === "cadastro") console.log("cadastro");
+  async function submeter() {
+    try {
+      if (modo === "login") await login(email, senha);
+      else await cadastrar(email, senha);
+    } catch (error) {
+      exibirErro(error?.message ?? "Ocorreu um erro inesperado!", 5);
+    }
   }
 
   function exibirErro(msg: string, tempoS = 5) {
@@ -32,6 +41,7 @@ export default function Autenticacao(props: propsInt) {
           src="https://source.unsplash.com/random"
           alt="Imagem da tela de autenticacao"
           className="
+          
           h-screen
           w-full
           object-cover
