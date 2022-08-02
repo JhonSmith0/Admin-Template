@@ -19,7 +19,7 @@ export function AppProvider(props: any) {
   const [tema, setTema] = useState<Tema>("");
 
   useEffect(() => {
-    const salvo = window.localStorage.getItem("tema") ?? "";
+    const salvo: any = window.localStorage.getItem("tema") ?? "";
     setTema(salvo);
   }, []);
 

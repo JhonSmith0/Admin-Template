@@ -15,7 +15,8 @@ export default function Autenticacao(props: propsInt) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  const { usuario, loginGoogle, login, cadastrar } = useAuthContext();
+  const { usuario, loginGoogle, login, cadastrar, carregando } =
+    useAuthContext();
   useEffect(() => {
     if (usuario) Router.push("/");
   }, [usuario]);
@@ -35,29 +36,34 @@ export default function Autenticacao(props: propsInt) {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="hidden md:block w-1/2 lg:w-2/3">
-        <img
-          src="https://source.unsplash.com/random"
-          alt="Imagem da tela de autenticacao"
-          className="
+    !carregando &&
+    !usuario && (
+      <div className="flex h-screen items-center justify-center">
+        <div className="hidden md:block w-1/2 lg:w-2/3">
+          <picture>
+            <source src="https://source.unsplash.com/random" />
+            <img
+              src="https://source.unsplash.com/random"
+              alt="Imagem da tela de autenticacao"
+              className="
           
           h-screen
           w-full
           object-cover
           "
-        />
-      </div>
-      <div className="m-10 md:w-1/2 w-full lg:w-1/3">
-        <h1 className="text-3xl font-bold mb-5">
-          {modo === "login"
-            ? "Entre com a sua conta"
-            : "Cadastre-se na Plataforma"}
-        </h1>
+            />
+          </picture>
+        </div>
+        <div className="m-10 md:w-1/2 w-full lg:w-1/3">
+          <h1 className="text-3xl font-bold mb-5">
+            {modo === "login"
+              ? "Entre com a sua conta"
+              : "Cadastre-se na Plataforma"}
+          </h1>
 
-        {erro && (
-          <div
-            className="bg-red-400 text-white py-3 px-5 my-2
+          {erro && (
+            <div
+              className="bg-red-400 text-white py-3 px-5 my-2
           flex
           items-center
 
@@ -65,28 +71,28 @@ export default function Autenticacao(props: propsInt) {
         border-red-700
         rounded-lg
         "
-          >
-            {warning(6)}
-            <span className="ml-3 text-sm">{erro}</span>
-          </div>
-        )}
-        <AuthInput
-          label="Email"
-          tipo="email"
-          valor={email}
-          onChange={setEmail}
-          obrigatorio
-        />
-        <AuthInput
-          label="Senha"
-          tipo="password"
-          valor={senha}
-          onChange={setSenha}
-          obrigatorio
-        />
-        <button
-          onClick={submeter}
-          className="
+            >
+              {warning(6)}
+              <span className="ml-3 text-sm">{erro}</span>
+            </div>
+          )}
+          <AuthInput
+            label="Email"
+            tipo="email"
+            valor={email}
+            onChange={setEmail}
+            obrigatorio
+          />
+          <AuthInput
+            label="Senha"
+            tipo="password"
+            valor={senha}
+            onChange={setSenha}
+            obrigatorio
+          />
+          <button
+            onClick={submeter}
+            className="
       
       w-full
       bg-indigo-500
@@ -98,15 +104,15 @@ export default function Autenticacao(props: propsInt) {
       py-3
       
       "
-        >
-          {modo === "login" ? "Entrar" : "Cadastrar"}
-        </button>
+          >
+            {modo === "login" ? "Entrar" : "Cadastrar"}
+          </button>
 
-        <hr className="my-6 border-gray-300 w-full" />
+          <hr className="my-6 border-gray-300 w-full" />
 
-        <button
-          onClick={loginGoogle}
-          className="
+          <button
+            onClick={loginGoogle}
+            className="
       
       w-full
       bg-red-500
@@ -117,46 +123,47 @@ export default function Autenticacao(props: propsInt) {
       py-3
       
       "
-        >
-          Entrar com google
-        </button>
+          >
+            Entrar com google
+          </button>
 
-        {modo === "login" ? (
-          <p className="mt-8">
-            Novo por aqui?
-            <a
-              onClick={() => setModo("cadastro")}
-              className="
+          {modo === "login" ? (
+            <p className="mt-8">
+              Novo por aqui?
+              <a
+                onClick={() => setModo("cadastro")}
+                className="
             text-blue-500
             hover:text-blue-700
             font-semibold
             cursor-pointer
             
             "
-            >
-              {" "}
-              Crie uma conta gratuitamente
-            </a>
-          </p>
-        ) : (
-          <p className="mt-8">
-            Já faz parte da nossa comunidade?
-            <a
-              onClick={() => setModo("login")}
-              className="
+              >
+                {" "}
+                Crie uma conta gratuitamente
+              </a>
+            </p>
+          ) : (
+            <p className="mt-8">
+              Já faz parte da nossa comunidade?
+              <a
+                onClick={() => setModo("login")}
+                className="
             text-blue-500
             hover:text-blue-700
             font-semibold
             cursor-pointer
             
             "
-            >
-              {" "}
-              Entre com suas credenciais
-            </a>
-          </p>
-        )}
+              >
+                {" "}
+                Entre com suas credenciais
+              </a>
+            </p>
+          )}
+        </div>
       </div>
-    </div>
+    )
   );
 }

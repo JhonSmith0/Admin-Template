@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useLayoutEffect, useState } from "react";
 import Router from "../../../../node_modules/next/router";
 
 import Cookies from "../../../../node_modules/js-cookie/index";
@@ -43,14 +43,15 @@ async function usuarioNormalizado(
 }
 
 export function AuthProvider(props: any) {
-  const [carregando, setCarregando] = useState<boolean>(false);
+  const [carregando, setCarregando] = useState<boolean>(true);
   const [usuario, setUsuario] = useState<Usuario>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (Cookies.get("admin-template-coder-auth") && !usuario) {
       const cancelar = firebase.auth().onIdTokenChanged(configurarSessao);
       return () => cancelar();
     }
+    setCarregando(false);
   }, [usuario]);
 
   async function configurarSessao(usuarioFireBase: any) {

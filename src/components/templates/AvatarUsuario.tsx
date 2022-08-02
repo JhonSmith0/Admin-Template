@@ -12,11 +12,14 @@ export default function AvatarUsuario(props: propsInt) {
   const { usuario } = useAuthContext();
   return (
     <Link href="/perfil">
-      <img
-        src={usuario?.imageUrl ?? "/images/avatar.svg"}
-        alt="Foto do usuario"
-        className={`w-10 h-10 rounded-full cursor-pointer ${props.className}`}
-      />
+      <picture>
+        <source src={usuario?.imageUrl ?? "/images/avatar.svg"} />
+        <img
+          src={usuario?.imageUrl ?? "/images/avatar.svg"}
+          alt="Foto do usuario"
+          className={`w-10 h-10 rounded-full cursor-pointer ${props.className}`}
+        />
+      </picture>
     </Link>
   );
 }

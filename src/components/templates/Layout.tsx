@@ -4,11 +4,9 @@ import MenuLateral from "./MenuLateral";
 import Cabecalho from "./Cabecalho";
 import Conteudo from "./Conteudo";
 import useAppContext from "../data/hooks/useAppContext";
-import ForcarAutenticacao from "../auth/ForcarAutenticacao";
 import useAuthContext from "../data/hooks/useAuth";
 import Router from "../../../node_modules/next/router";
 import { useEffect, useState } from "react";
-import forcarAutenticacao from "../../functions/forcarAutenticacao";
 
 interface propsInt {
   titulo: string;
@@ -18,9 +16,16 @@ interface propsInt {
 
 export default function Layout(props: propsInt) {
   const { tema } = useAppContext();
+  const { usuario, carregando } = useAuthContext();
+
+  console.log(usuario, carregando);
+  if (!usuario && !carregando) {
+    Router.push("/autenticacao");
+  }
 
   return (
-    <ForcarAutenticacao key={tema}>
+    usuario &&
+    !carregando && (
       <div className={`${tema} flex h-screen w-screen`}>
         <MenuLateral />
         <div className="flex flex-col w-full p-7 bg-gray-300 dark:bg-gray-900 ">
@@ -28,6 +33,6 @@ export default function Layout(props: propsInt) {
           <Conteudo>{props.children}</Conteudo>
         </div>
       </div>
-    </ForcarAutenticacao>
+    )
   );
 }
